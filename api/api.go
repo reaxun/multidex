@@ -59,5 +59,6 @@ func StartAPI() {
     router.HandleFunc("/pokemon/type/{type}", GetPokemonByType).Methods("GET")
     router.HandleFunc("/attacks", GetAttacks).Methods("GET")
     router.HandleFunc("/attacks/{name}", GetAttackFromAttacks).Methods("GET")
+    router.HandleFunc("/types", GetTypes).Methods("GET")
     log.Fatal(http.ListenAndServe(":12345", router))
 }
