@@ -14,6 +14,6 @@ func (attackType *Type) GetMultiplier(defenderType *Type) float32 {
 }
 
 func GetTypes(w http.ResponseWriter, req *http.Request) {
-    types := [18]string{"Normal", "Fire", "Water", "Electric", "Grass", "Flying", "Ground", "Fighting", "Bug", "Poison", "Psychic", "Rock", "Ghost", "Ice", "Dragon", "Dark", "Steel", "Fairy"}
+    types := [18]string{"normal", "fire", "water", "electric", "grass", "flying", "ground", "fighting", "bug", "poison", "psychic", "rock", "ghost", "ice", "dragon", "dark", "steel", "fairy"}
     json.NewEncoder(w).Encode(types)
 }

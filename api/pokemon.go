@@ -80,7 +80,11 @@ func ReadPokemonDatabase(db *sql.DB) error {
     for _, row := range rows {
         s := make([]interface{}, len(row))
         for i, v := range row {
-            s[i] = v
+            if i == 1 || i > 7 {
+                s[i] = strings.ToLower(v)
+            } else {
+                s[i] = v
+            }
         }
         if _, err = stmt.Exec(s...); err != nil {
             fmt.Println("Exec failed")
@@ -92,7 +96,7 @@ func ReadPokemonDatabase(db *sql.DB) error {
 
 func GetPokemonFromPokedex(w http.ResponseWriter, req *http.Request) {
     params := mux.Vars(req)
-    name := strings.Title(params["name"])
+    name := strings.ToLower(params["name"])
     rows, err := runQuery("select * from pokemon where Name='" + name + "'")
     if err != nil {
         fmt.Println("Error running query")
@@ -111,7 +115,7 @@ func GetPokemonFromPokedex(w http.ResponseWriter, req *http.Request) {
 func GetPokemonByType(w http.ResponseWriter, req *http.Request) {
     var pokedex []Pokemon
     params := mux.Vars(req)
-    pokemonType := strings.Title(params["type"])
+    pokemonType := strings.ToLower(params["type"])
     rows, err := runQuery("select * from pokemon where TypeA='" + pokemonType + "' OR TypeB='" + pokemonType + "'")
     if err != nil {
         fmt.Println("Error running query")

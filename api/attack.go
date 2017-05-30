@@ -67,7 +67,11 @@ func ReadAttackDatabase(db *sql.DB) error {
     for _, row := range rows {
         s := make([]interface{}, len(row))
         for i, v := range row {
-            s[i] = v
+            if i <= 2 {
+                s[i] = strings.ToLower(v)
+            } else {
+                s[i] = v
+            }
         }
         if _, err = stmt.Exec(s...); err != nil {
             fmt.Println("Exec failed")
@@ -79,7 +83,7 @@ func ReadAttackDatabase(db *sql.DB) error {
 
 func GetAttackFromAttacks(w http.ResponseWriter, req *http.Request) {
     params := mux.Vars(req)
-    name := strings.Title(params["name"])
+    name := strings.ToLower(params["name"])
     rows, err := runQuery("select * from attacks where Name='" + name + "'")
     if err != nil {
         fmt.Println("Error running query")
@@ -98,7 +102,7 @@ func GetAttackFromAttacks(w http.ResponseWriter, req *http.Request) {
 func GetAttacksByType(w http.ResponseWriter, req *http.Request) {
     var attacks []Attack
     params := mux.Vars(req)
-    attackType := strings.Title(params["type"])
+    attackType := strings.ToLower(params["type"])
     rows, err := runQuery("select * from attacks where Type='" + attackType + "'")
     if err != nil {
         fmt.Println("Error running query")
