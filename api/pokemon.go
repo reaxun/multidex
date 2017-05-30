@@ -8,7 +8,6 @@ import (
     "os"
     "net/http"
     "strings"
-    "time"
 
     "github.com/gorilla/mux"
 )
@@ -92,7 +91,6 @@ func ReadPokemonDatabase(db *sql.DB) error {
 }
 
 func GetPokemonFromPokedex(w http.ResponseWriter, req *http.Request) {
-    searchStartTime := time.Now()
     params := mux.Vars(req)
     name := strings.Title(params["name"])
     rows, err := runQuery("select * from pokemon where Name='" + name + "'")
@@ -104,8 +102,6 @@ func GetPokemonFromPokedex(w http.ResponseWriter, req *http.Request) {
 
     for rows.Next() {
         p := NewPokemon(rows)
-        searchDuration := time.Since(searchStartTime)
-        fmt.Println("Took " + searchDuration.String() + " to search Pokemon database")
         json.NewEncoder(w).Encode(p)
         return
     }

@@ -8,7 +8,6 @@ import (
     "os"
     "net/http"
     "strings"
-    "time"
 
     "github.com/gorilla/mux"
 )
@@ -79,7 +78,6 @@ func ReadAttackDatabase(db *sql.DB) error {
 }
 
 func GetAttackFromAttacks(w http.ResponseWriter, req *http.Request) {
-    searchStartTime := time.Now()
     params := mux.Vars(req)
     name := strings.Title(params["name"])
     rows, err := runQuery("select * from attacks where Name='" + name + "'")
@@ -91,12 +89,27 @@ func GetAttackFromAttacks(w http.ResponseWriter, req *http.Request) {
 
     for rows.Next() {
         a := NewAttack(rows)
-        searchDuration := time.Since(searchStartTime)
-        fmt.Println("Took " + searchDuration.String() + " to search Attack database")
         json.NewEncoder(w).Encode(a)
         return
     }
     json.NewEncoder(w).Encode(&Attack{})
+}
+
+func GetAttacksByType(w http.ResponseWriter, req *http.Request) {
+    var attacks []Attack
+    params := mux.Vars(req)
+    attackType := strings.Title(params["type"])
+    rows, err := runQuery("select * from attacks where Type='" + attackType + "'")
+    if err != nil {
+        fmt.Println("Error running query")
+        return
+    }
+
+    for rows.Next() {
+        a := NewAttack(rows)
+        attacks = append(attacks, *a)
+    }
+    json.NewEncoder(w).Encode(attacks)
 }
 
 func GetAttacks(w http.ResponseWriter, req *http.Request) {
