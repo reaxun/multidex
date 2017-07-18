@@ -1,7 +1,7 @@
 package main
 
-import "multidex/api"
+import "github.com/reaxun/multidex/api"
 
 func main() {
-    api.StartAPI()
+	api.StartAPI()
 }
