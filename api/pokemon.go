@@ -22,19 +22,21 @@ type Stats struct {
 }
 
 type Pokemon struct {
-	Number int    `json:"number,omitempty"`
-	Name   string `json:"name,omitempty"`
+	Number int    `json:"number"`
+	Name   string `json:"name"`
 	Base   *Stats `json:"basestats,omitempty"`
 	EVs    *Stats `json:"evs,omitempty"`
 	IVs    *Stats `json:"ivs,omitempty"`
-	TypeA  string `json:"typea,omitempty"`
-	TypeB  string `json:"typeb,omitempty"`
+	TypeA  Type   `json:"typea"`
+	TypeB  Type   `json:"typeb"`
 }
 
 func NewPokemon(rows *sql.Rows) *Pokemon {
 	var number, hp, atk, def, satk, sdef, spd int
-	var name, typea, typeb string
-	rows.Scan(&number, &name, &hp, &atk, &def, &satk, &sdef, &spd, &typea, &typeb)
+	var name, ta, tb string
+	rows.Scan(&number, &name, &hp, &atk, &def, &satk, &sdef, &spd, &ta, &tb)
+	typea := TypeFromString(ta)
+	typeb := TypeFromString(tb)
 	return &Pokemon{Number: number, Name: name, Base: &Stats{HP: hp, Attack: atk, Defense: def, SAttack: satk, SDefense: sdef, Speed: spd}, TypeA: typea, TypeB: typeb}
 }
 

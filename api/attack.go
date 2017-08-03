@@ -13,19 +13,20 @@ import (
 )
 
 type Attack struct {
-	Name     string `json:"name,omitempty"`
-	Type     string `json:"type,omitempty"`
-	Category string `json:"category,omitempty"`
-	PP       int    `json:"pp,omitempty"`
-	Power    int    `json:"pow,omitempty"`
-	Accuracy int    `json:"acc,omitempty"`
+	Name     string `json:"name"`
+	AtkType  Type   `json:"typea"`
+	Category string `json:"category"`
+	PP       int    `json:"pp"`
+	Power    int    `json:"pow"`
+	Accuracy int    `json:"acc"`
 }
 
 func NewAttack(rows *sql.Rows) *Attack {
-	var name, atkType, category string
+	var name, t, category string
 	var pp, power, accuracy int
-	rows.Scan(&name, &atkType, &category, &pp, &power, &accuracy)
-	return &Attack{Name: name, Type: atkType, Category: category, PP: pp, Power: power, Accuracy: accuracy}
+	rows.Scan(&name, &t, &category, &pp, &power, &accuracy)
+	atkType := TypeFromString(t)
+	return &Attack{Name: name, AtkType: atkType, Category: category, PP: pp, Power: power, Accuracy: accuracy}
 }
 
 func ReadAttackDatabase(db *sql.DB) error {
