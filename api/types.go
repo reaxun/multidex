@@ -32,7 +32,7 @@ const (
 var (
 	types [19]string = [19]string{"normal", "fighting", "flying", "poison", "ground", "rock", "bug", "ghost", "steel", "fire", "water", "grass", "electric", "psychic", "ice", "dragon", "dark", "fairy", "none"}
 
-	chart [19][19]float32 = [19][19]float32{
+	chart [19][19]float64 = [19][19]float64{
 		{1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 1.0, 0.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0}, // Normal
 		{2.0, 1.0, 0.5, 0.5, 1.0, 2.0, 0.5, 0.0, 2.0, 1.0, 1.0, 1.0, 1.0, 0.5, 2.0, 1.0, 2.0, 0.5, 1.0}, // Fighting
 		{1.0, 2.0, 1.0, 1.0, 1.0, 0.5, 2.0, 1.0, 0.5, 1.0, 1.0, 2.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0}, // Flying
@@ -72,7 +72,7 @@ func TypeFromString(s string) Type {
 	return None
 }
 
-func GetMultiplier(attackerType, defenderType Type) float32 {
+func GetMultiplier(attackerType, defenderType Type) float64 {
 	return chart[attackerType][defenderType]
 }
 

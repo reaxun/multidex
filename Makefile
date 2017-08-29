@@ -6,6 +6,9 @@ all: deps fmt vet lint
 .PHONY: deps
 deps:
 	go get github.com/golang/lint/golint
+	go get github.com/gorilla/mux
+	go get github.com/mattn/go-sqlite3
+	go get github.com/stretchr/testify/assert
 
 .PHONY: lint
 lint:

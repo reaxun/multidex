@@ -58,7 +58,8 @@ func GetAttackFromAttacks(w http.ResponseWriter, req *http.Request) {
 		json.NewEncoder(w).Encode(a)
 		return
 	}
-	json.NewEncoder(w).Encode(&Attack{})
+	// If we are here, no rows were found
+	w.WriteHeader(http.StatusNotFound)
 }
 
 func GetAttacksByType(w http.ResponseWriter, req *http.Request) {
@@ -75,7 +76,12 @@ func GetAttacksByType(w http.ResponseWriter, req *http.Request) {
 		a := NewAttack(rows)
 		attacks = append(attacks, *a)
 	}
-	json.NewEncoder(w).Encode(attacks)
+	if len(attacks) == 0 {
+		// No attacks found, return 404 for bad type
+		w.WriteHeader(http.StatusNotFound)
+	} else {
+		json.NewEncoder(w).Encode(attacks)
+	}
 }
 
 func GetAttacks(w http.ResponseWriter, req *http.Request) {

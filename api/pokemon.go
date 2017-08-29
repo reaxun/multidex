@@ -73,7 +73,8 @@ func GetPokemonFromPokedex(w http.ResponseWriter, req *http.Request) {
 		json.NewEncoder(w).Encode(p)
 		return
 	}
-	json.NewEncoder(w).Encode(&Pokemon{})
+	// If we are here, no rows were found
+	w.WriteHeader(http.StatusNotFound)
 }
 
 func GetPokemonByType(w http.ResponseWriter, req *http.Request) {
@@ -91,7 +92,12 @@ func GetPokemonByType(w http.ResponseWriter, req *http.Request) {
 		p := NewPokemon(rows)
 		pokedex = append(pokedex, *p)
 	}
-	json.NewEncoder(w).Encode(pokedex)
+	if len(pokedex) == 0 {
+		// If we are here, the type was not found
+		w.WriteHeader(http.StatusNotFound)
+	} else {
+		json.NewEncoder(w).Encode(pokedex)
+	}
 }
 
 func GetPokedex(w http.ResponseWriter, req *http.Request) {

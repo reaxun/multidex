@@ -5,6 +5,12 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+
+	"github.com/gorilla/mux"
+)
+
+var (
+	router *mux.Router
 )
 
 func getNewRequest(resource string) (*http.Request, error) {
@@ -58,4 +64,7 @@ func init() {
 	if err = ReadDatabase(filename, tableStr, prepareStr); err != nil {
 		panic("Attack database not set up properly!")
 	}
+
+	router = mux.NewRouter()
+	addRoutes(router)
 }
