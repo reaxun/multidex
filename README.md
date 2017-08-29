@@ -23,30 +23,12 @@ docker run --publish 12345:12345 --name multidex --rm multidex
 This application only supports GET requests, and can be used to retrieve information about pokemon, attacks, and types.
 The following endpoints are available:
 
-`/pokemon`
-
-List all Pokemon
-
-`/pokemon/{name}`
-
-Display a specific Pokemon by name
-
-`/pokemon/type/{type}`
-
-List all Pokemon of a specific Type
-
-`/attacks`
-
-List all Attacks
-
-`/attacks/{name}'
-
-Display a specific Attack by name
-
-`/attacks/type/{type}`
-
-List all Attacks of a specific Type
-
-`/types`
-
-List all Types
+| Endpoint               | Effect                              |
+|------------------------|-------------------------------------|
+| `/pokemon`             | List all Pokemon                    |
+| `/pokemon/{name}`      | Display a specific Pokemon by name  |
+| `/pokemon/type/{type}` | List all Pokemon of a specific Type |
+| `/attacks`             | List all Attacks                    |
+| `/attacks/{name}`      | Display a specific Attack by name   |
+| `/attacks/type/{type}` | List all Attacks of a specific Type |
+| `/types`               | List all Types                      |

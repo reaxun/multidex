@@ -19,6 +19,10 @@ fmt:
 vet:
 	go tool vet -composites=false ${GOFILES}
 
+.PHONY: test
+test: vet fmt lint
+	go test -v github.com/reaxun/multidex/api
+
 .PHONY: gofmt
 gofmt:
 	gofmt -l -w ${GOFILES}

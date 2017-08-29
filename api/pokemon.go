@@ -2,11 +2,9 @@ package api
 
 import (
 	"database/sql"
-	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
 	"strings"
 
 	"github.com/gorilla/mux"
@@ -41,16 +39,8 @@ func NewPokemon(rows *sql.Rows) *Pokemon {
 }
 
 func ReadPokemonDatabase(db *sql.DB) error {
-	f, err := os.Open("assets/pokemon.csv")
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-
-	csvr := csv.NewReader(f)
-	rows, err := csvr.ReadAll()
-
-	table := `
+	filename := "assets/pokemon.csv"
+	tableStr := `
     create table pokemon (
         Number INT,
         Name TEXT,
@@ -64,36 +54,8 @@ func ReadPokemonDatabase(db *sql.DB) error {
         TypeB TEXT
     )
     `
-	if _, err := db.Exec(table); err != nil {
-		return err
-	}
-
-	tx, err := db.Begin()
-	if err != nil {
-		return err
-	}
-
-	stmt, err := tx.Prepare("insert into pokemon (Number, Name, HP, Attack, Defense, SAttack, SDefense, Speed, TypeA, TypeB) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
-	if err != nil {
-		return err
-	}
-	defer stmt.Close()
-
-	for _, row := range rows {
-		s := make([]interface{}, len(row))
-		for i, v := range row {
-			if i == 1 || i > 7 {
-				s[i] = strings.ToLower(v)
-			} else {
-				s[i] = v
-			}
-		}
-		if _, err = stmt.Exec(s...); err != nil {
-			fmt.Println("Exec failed")
-			return err
-		}
-	}
-	return tx.Commit()
+	prepareStr := "insert into pokemon (Number, Name, HP, Attack, Defense, SAttack, SDefense, Speed, TypeA, TypeB) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+	return ReadDatabase(filename, tableStr, prepareStr)
 }
 
 func GetPokemonFromPokedex(w http.ResponseWriter, req *http.Request) {
