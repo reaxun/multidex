@@ -1,5 +1,8 @@
 # Multidex
 
+[![Build Status](https://travis-ci.org/reaxun/multidex.svg?branch=master)](https://travis-ci.org/reaxun/multidex)
+
+
 Pokemon-related APIs and applications.
 
 ## Starting the API

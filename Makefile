@@ -18,14 +18,18 @@ lint:
 fmt:
 	@if [ -n "$$(gofmt -l ${GOFILES})" ]; then echo 'Please run gofmt -l -w on your code.' && exit 1; fi
 
+.PHONY: gofmt
+gofmt:
+	gofmt -l -w ${GOFILES}
+
 .PHONY: vet
 vet:
 	go tool vet -composites=false ${GOFILES}
 
 .PHONY: test
 test: vet fmt lint
-	go test -v github.com/reaxun/multidex/api
+	go test -v -covermode=count -coverprofile=cover.out github.com/reaxun/multidex/api
 
-.PHONY: gofmt
-gofmt:
-	gofmt -l -w ${GOFILES}
+.PHONY: coverage
+coverage:
+	go tool cover -html=cover.out -o=cover.html

@@ -1,3 +1,6 @@
 .DS_Store
 multidex
 multidex.db
+api/test.db
+cover.out
+cover.html

@@ -29,16 +29,7 @@ func NewAttack(rows *sql.Rows) *Attack {
 
 func ReadAttackDatabase(db *sql.DB) error {
 	filename := "assets/attacks.csv"
-	tableStr := `
-    create table attacks (
-        Name TEXT,
-        Type TEXT,
-        Category TEXT,
-        PP INT,
-        Power INT,
-        Accuracy INT
-    )
-    `
+	tableStr := "create table attacks (Name TEXT, Type TEXT, Category TEXT, PP INT, Power INT, Accuracy INT)"
 	prepareStr := "insert into attacks (Name, Type, Category, PP, Power, Accuracy) values (?, ?, ?, ?, ?, ?)"
 	return ReadDatabase(filename, tableStr, prepareStr)
 }
@@ -49,6 +40,7 @@ func GetAttackFromAttacks(w http.ResponseWriter, req *http.Request) {
 	rows, err := runQuery("select * from attacks where Name='" + name + "'")
 	if err != nil {
 		fmt.Println("Error running query")
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	defer rows.Close()
@@ -69,6 +61,7 @@ func GetAttacksByType(w http.ResponseWriter, req *http.Request) {
 	rows, err := runQuery("select * from attacks where Type='" + attackType + "'")
 	if err != nil {
 		fmt.Println("Error running query")
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
@@ -89,6 +82,7 @@ func GetAttacks(w http.ResponseWriter, req *http.Request) {
 	rows, err := runQuery("select * from attacks")
 	if err != nil {
 		fmt.Println("Error running query")
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	defer rows.Close()

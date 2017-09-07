@@ -17,7 +17,17 @@ func TestGetAttackFromAttacks(t *testing.T) {
 	assert.Equal(t, 200, writer.Code)
 }
 
-func TestGetAttackFromAttacksFail(t *testing.T) {
+func TestGetAttackFromAttacksBadRequest(t *testing.T) {
+	writer := httptest.NewRecorder()
+	openFakeDB()
+
+	req, _ := getNewRequest("/attacks/bubble")
+	router.ServeHTTP(writer, req)
+	assert.Equal(t, 400, writer.Code)
+	closeFakeDB()
+}
+
+func TestGetAttackFromAttacksNotFound(t *testing.T) {
 	writer := httptest.NewRecorder()
 
 	req, _ := getNewRequest("/attacks/badattack")
@@ -35,7 +45,17 @@ func TestGetAttacksByType(t *testing.T) {
 	assert.Equal(t, 200, writer.Code)
 }
 
-func TestGetAttacksByTypeFail(t *testing.T) {
+func TestGetAttacksByTypeBadRequest(t *testing.T) {
+	writer := httptest.NewRecorder()
+	openFakeDB()
+
+	req, _ := getNewRequest("/attacks/type/water")
+	router.ServeHTTP(writer, req)
+	assert.Equal(t, 400, writer.Code)
+	closeFakeDB()
+}
+
+func TestGetAttacksByTypeNotFound(t *testing.T) {
 	writer := httptest.NewRecorder()
 
 	req, _ := getNewRequest("/attacks/type/badtype")
@@ -51,4 +71,14 @@ func TestGetAttacks(t *testing.T) {
 	expected := "{\"name\":\"bubble\",\"type\":\"water\",\"category\":\"special\",\"pp\":40,\"pow\":20,\"acc\":100}"
 	assert.Contains(t, writer.Body.String(), expected)
 	assert.Equal(t, 200, writer.Code)
+}
+
+func TestGetAttacksBadRequest(t *testing.T) {
+	writer := httptest.NewRecorder()
+	openFakeDB()
+
+	req, _ := getNewRequest("/attacks")
+	router.ServeHTTP(writer, req)
+	assert.Equal(t, 400, writer.Code)
+	closeFakeDB()
 }

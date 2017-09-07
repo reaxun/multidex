@@ -18,12 +18,6 @@ import (
 var db *sql.DB
 
 func runQuery(query string) (*sql.Rows, error) {
-	db, err := sql.Open("sqlite3", "multidex.db")
-	if err != nil {
-		fmt.Println("Failed to open database")
-		return nil, err
-	}
-	defer db.Close()
 	return db.Query(query)
 }
 
@@ -77,7 +71,6 @@ func setup() {
 		fmt.Println("Failed to open database")
 		return
 	}
-	defer db.Close()
 
 	pokemonStartTime := time.Now()
 	if err := ReadPokemonDatabase(db); err != nil {

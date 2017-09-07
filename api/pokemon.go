@@ -40,20 +40,7 @@ func NewPokemon(rows *sql.Rows) *Pokemon {
 
 func ReadPokemonDatabase(db *sql.DB) error {
 	filename := "assets/pokemon.csv"
-	tableStr := `
-    create table pokemon (
-        Number INT,
-        Name TEXT,
-        HP INT,
-        Attack INT,
-        Defense INT,
-        SAttack INT,
-        SDefense INT,
-        Speed INT,
-        TypeA TEXT,
-        TypeB TEXT
-    )
-    `
+	tableStr := "create table pokemon (Number INT, Name TEXT, HP INT, Attack INT, Defense INT, SAttack INT, SDefense INT, Speed INT, TypeA TEXT, TypeB TEXT)"
 	prepareStr := "insert into pokemon (Number, Name, HP, Attack, Defense, SAttack, SDefense, Speed, TypeA, TypeB) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 	return ReadDatabase(filename, tableStr, prepareStr)
 }
@@ -64,6 +51,7 @@ func GetPokemonFromPokedex(w http.ResponseWriter, req *http.Request) {
 	rows, err := runQuery("select * from pokemon where Name='" + name + "'")
 	if err != nil {
 		fmt.Println("Error running query")
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	defer rows.Close()
@@ -84,6 +72,7 @@ func GetPokemonByType(w http.ResponseWriter, req *http.Request) {
 	rows, err := runQuery("select * from pokemon where TypeA='" + pokemonType + "' OR TypeB='" + pokemonType + "'")
 	if err != nil {
 		fmt.Println("Error running query")
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	defer rows.Close()
@@ -105,6 +94,7 @@ func GetPokedex(w http.ResponseWriter, req *http.Request) {
 	rows, err := runQuery("select * from pokemon")
 	if err != nil {
 		fmt.Println("Error running query")
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	defer rows.Close()
