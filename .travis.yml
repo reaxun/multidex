@@ -5,12 +5,15 @@ go:
 
 sudo: false
 
+branches:
+  only:
+  - master
+
 before_script:
   - make deps
 
 script:
-  - make test
-  - make coverage
+  - ./run_tests.sh
 
 notifications:
   email:

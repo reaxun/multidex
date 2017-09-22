@@ -17,9 +17,25 @@ The endpoints can then be reached at `localhost:12345`.
 This app can be built from its Dockerfile.
 
 ```
-docker build -t multidex .
+make container
 docker run --publish 12345:12345 --name multidex --rm multidex
 ```
+
+As above, the app can then be reached at `localhost:12345`.
+
+### Running the app in kubernetes
+
+This app can be run in a kubernetes cluster.
+
+```
+kubectl run multidex --replicas=3 --image=reaxun/multidex:latest --port=12345
+kubectl expose deployment multidex --type=LoadBalancer --name=multidex
+
+EXTERNAL_IP=$(kubectl get service multidex | awk '/multidex/ {print $3}')
+PORT=$(kubectl get service multidex | awk '/multidex/ {print $4}' | cut -d ':' -f 2 | cut -d '/' -f 1)
+```
+
+The app can be reached at `http://$EXTERNAL_IP:$PORT`.
 
 ## Using the API
 

@@ -33,3 +33,7 @@ test: vet fmt lint
 .PHONY: coverage
 coverage:
 	go tool cover -html=cover.out -o=cover.html
+
+.PHONY: container
+container:
+	docker build -t multidex .
